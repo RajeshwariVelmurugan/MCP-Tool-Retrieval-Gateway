@@ -1,0 +1,3029 @@
+{
+  "meta": {
+    "source": "starter-approximation",
+    "note": "Approximated from the public descriptions of popular MCP servers (reference servers, GitHub, Slack, Playwright, Notion-style, etc.). Names and descriptions are close but NOT guaranteed identical to the current upstream versions. Replace with a real dump: python -m toolgate.collect",
+    "tool_count": 139
+  },
+  "tools": [
+    {
+      "id": "filesystem__read_text_file",
+      "server": "filesystem",
+      "name": "read_text_file",
+      "description": "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use the 'head' parameter to read only the first N lines of a file, or the 'tail' parameter to read only the last N lines. Only works within allowed directories.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "head": {
+            "type": "integer",
+            "description": "If provided, returns only the first N lines"
+          },
+          "tail": {
+            "type": "integer",
+            "description": "If provided, returns only the last N lines"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__read_media_file",
+      "server": "filesystem",
+      "name": "read_media_file",
+      "description": "Read an image or audio file. Returns the base64 encoded data and MIME type. Only works within allowed directories.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__read_multiple_files",
+      "server": "filesystem",
+      "name": "read_multiple_files",
+      "description": "Read the contents of multiple files simultaneously. This is more efficient than reading files one by one when you need to analyze or compare multiple files. Each file's content is returned with its path as a reference. Failed reads for individual files won't stop the entire operation.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "paths"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__write_file",
+      "server": "filesystem",
+      "name": "write_file",
+      "description": "Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "content"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__edit_file",
+      "server": "filesystem",
+      "name": "edit_file",
+      "description": "Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "edits": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "dryRun": {
+            "type": "boolean",
+            "description": "Preview changes using git-style diff format"
+          }
+        },
+        "required": [
+          "path",
+          "edits"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__create_directory",
+      "server": "filesystem",
+      "name": "create_directory",
+      "description": "Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__list_directory",
+      "server": "filesystem",
+      "name": "list_directory",
+      "description": "Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__list_directory_with_sizes",
+      "server": "filesystem",
+      "name": "list_directory_with_sizes",
+      "description": "Get a detailed listing of all files and directories in a specified path, including sizes. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. Useful for understanding disk usage and finding large files.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sortBy": {
+            "type": "string",
+            "description": "Sort entries by name or size"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__directory_tree",
+      "server": "filesystem",
+      "name": "directory_tree",
+      "description": "Get a recursive tree view of files and directories as a JSON structure. Each entry includes 'name', 'type' (file/directory), and 'children' for directories. Files have no children array, while directories always have a children array.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "excludePatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__move_file",
+      "server": "filesystem",
+      "name": "move_file",
+      "description": "Move or rename files and directories. Can move files between directories and rename them in a single operation. If the destination exists, the operation will fail. Works across different directories and can be used for simple renaming within the same directory.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "destination": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "destination"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__search_files",
+      "server": "filesystem",
+      "name": "search_files",
+      "description": "Recursively search for files and directories matching a pattern. Searches through all subdirectories from the starting path. The search is case-insensitive and matches partial names. Returns full paths to all matching items.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "excludePatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "path",
+          "pattern"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__get_file_info",
+      "server": "filesystem",
+      "name": "get_file_info",
+      "description": "Retrieve detailed metadata about a file or directory. Returns comprehensive information including size, creation time, last modified time, permissions, and type.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    },
+    {
+      "id": "filesystem__list_allowed_directories",
+      "server": "filesystem",
+      "name": "list_allowed_directories",
+      "description": "Returns the list of directories that this server is allowed to access. Subdirectories within these allowed directories are also accessible. Use this to understand which directories are available before trying to access files.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "id": "memory__create_entities",
+      "server": "memory",
+      "name": "create_entities",
+      "description": "Create multiple new entities in the knowledge graph",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "entities": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "entities"
+        ]
+      }
+    },
+    {
+      "id": "memory__create_relations",
+      "server": "memory",
+      "name": "create_relations",
+      "description": "Create multiple new relations between entities in the knowledge graph. Relations should be in active voice",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "relations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "relations"
+        ]
+      }
+    },
+    {
+      "id": "memory__add_observations",
+      "server": "memory",
+      "name": "add_observations",
+      "description": "Add new observations to existing entities in the knowledge graph",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "observations"
+        ]
+      }
+    },
+    {
+      "id": "memory__delete_entities",
+      "server": "memory",
+      "name": "delete_entities",
+      "description": "Delete multiple entities and their associated relations from the knowledge graph",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "entityNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "entityNames"
+        ]
+      }
+    },
+    {
+      "id": "memory__delete_observations",
+      "server": "memory",
+      "name": "delete_observations",
+      "description": "Delete specific observations from entities in the knowledge graph",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "deletions": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "deletions"
+        ]
+      }
+    },
+    {
+      "id": "memory__delete_relations",
+      "server": "memory",
+      "name": "delete_relations",
+      "description": "Delete multiple relations from the knowledge graph",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "relations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "relations"
+        ]
+      }
+    },
+    {
+      "id": "memory__read_graph",
+      "server": "memory",
+      "name": "read_graph",
+      "description": "Read the entire knowledge graph",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "id": "memory__search_nodes",
+      "server": "memory",
+      "name": "search_nodes",
+      "description": "Search for nodes in the knowledge graph based on a query",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query to match against entity names, types, and observation content"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "memory__open_nodes",
+      "server": "memory",
+      "name": "open_nodes",
+      "description": "Open specific nodes in the knowledge graph by their names",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "names"
+        ]
+      }
+    },
+    {
+      "id": "git__git_status",
+      "server": "git",
+      "name": "git_status",
+      "description": "Shows the working tree status",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path"
+        ]
+      }
+    },
+    {
+      "id": "git__git_diff_unstaged",
+      "server": "git",
+      "name": "git_diff_unstaged",
+      "description": "Shows changes in the working directory that are not yet staged",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path"
+        ]
+      }
+    },
+    {
+      "id": "git__git_diff_staged",
+      "server": "git",
+      "name": "git_diff_staged",
+      "description": "Shows changes that are staged for commit",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path"
+        ]
+      }
+    },
+    {
+      "id": "git__git_diff",
+      "server": "git",
+      "name": "git_diff",
+      "description": "Shows differences between branches or commits",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path",
+          "target"
+        ]
+      }
+    },
+    {
+      "id": "git__git_commit",
+      "server": "git",
+      "name": "git_commit",
+      "description": "Records changes to the repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path",
+          "message"
+        ]
+      }
+    },
+    {
+      "id": "git__git_add",
+      "server": "git",
+      "name": "git_add",
+      "description": "Adds file contents to the staging area",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "repo_path",
+          "files"
+        ]
+      }
+    },
+    {
+      "id": "git__git_reset",
+      "server": "git",
+      "name": "git_reset",
+      "description": "Unstages all staged changes",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path"
+        ]
+      }
+    },
+    {
+      "id": "git__git_log",
+      "server": "git",
+      "name": "git_log",
+      "description": "Shows the commit logs",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          },
+          "max_count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "repo_path"
+        ]
+      }
+    },
+    {
+      "id": "git__git_create_branch",
+      "server": "git",
+      "name": "git_create_branch",
+      "description": "Creates a new branch from an optional base branch",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          },
+          "branch_name": {
+            "type": "string"
+          },
+          "base_branch": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path",
+          "branch_name"
+        ]
+      }
+    },
+    {
+      "id": "git__git_checkout",
+      "server": "git",
+      "name": "git_checkout",
+      "description": "Switches branches",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          },
+          "branch_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path",
+          "branch_name"
+        ]
+      }
+    },
+    {
+      "id": "git__git_show",
+      "server": "git",
+      "name": "git_show",
+      "description": "Shows the contents of a commit",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path",
+          "revision"
+        ]
+      }
+    },
+    {
+      "id": "git__git_branch",
+      "server": "git",
+      "name": "git_branch",
+      "description": "List Git branches",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "repo_path": {
+            "type": "string"
+          },
+          "branch_type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "repo_path",
+          "branch_type"
+        ]
+      }
+    },
+    {
+      "id": "fetch__fetch",
+      "server": "fetch",
+      "name": "fetch",
+      "description": "Fetches a URL from the internet and optionally extracts its contents as markdown. Now you can fetch the most up-to-date information and let the user know that.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "max_length": {
+            "type": "integer"
+          },
+          "start_index": {
+            "type": "integer"
+          },
+          "raw": {
+            "type": "boolean",
+            "description": "Get the actual HTML content without simplification"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    {
+      "id": "time__get_current_time",
+      "server": "time",
+      "name": "get_current_time",
+      "description": "Get current time in a specific timezone",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name, e.g. Asia/Tokyo"
+          }
+        },
+        "required": [
+          "timezone"
+        ]
+      }
+    },
+    {
+      "id": "time__convert_time",
+      "server": "time",
+      "name": "convert_time",
+      "description": "Convert time between timezones",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "source_timezone": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "description": "Time to convert in 24-hour format (HH:MM)"
+          },
+          "target_timezone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_timezone",
+          "time",
+          "target_timezone"
+        ]
+      }
+    },
+    {
+      "id": "sequential_thinking__sequentialthinking",
+      "server": "sequential_thinking",
+      "name": "sequentialthinking",
+      "description": "A detailed tool for dynamic and reflective problem-solving through thoughts. This tool helps analyze problems through a flexible thinking process that can adapt and evolve. Each thought can build on, question, or revise previous insights as understanding deepens.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "thought": {
+            "type": "string"
+          },
+          "nextThoughtNeeded": {
+            "type": "boolean"
+          },
+          "thoughtNumber": {
+            "type": "integer"
+          },
+          "totalThoughts": {
+            "type": "integer"
+          },
+          "isRevision": {
+            "type": "boolean"
+          },
+          "branchId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "thought",
+          "nextThoughtNeeded",
+          "thoughtNumber",
+          "totalThoughts"
+        ]
+      }
+    },
+    {
+      "id": "github__create_or_update_file",
+      "server": "github",
+      "name": "create_or_update_file",
+      "description": "Create or update a single file in a GitHub repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "sha": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "path",
+          "content",
+          "message",
+          "branch"
+        ]
+      }
+    },
+    {
+      "id": "github__search_repositories",
+      "server": "github",
+      "name": "search_repositories",
+      "description": "Search for GitHub repositories",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "github__create_repository",
+      "server": "github",
+      "name": "create_repository",
+      "description": "Create a new GitHub repository in your account",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "private": {
+            "type": "boolean"
+          },
+          "autoInit": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "id": "github__get_file_contents",
+      "server": "github",
+      "name": "get_file_contents",
+      "description": "Get the contents of a file or directory from a GitHub repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "path"
+        ]
+      }
+    },
+    {
+      "id": "github__push_files",
+      "server": "github",
+      "name": "push_files",
+      "description": "Push multiple files to a GitHub repository in a single commit",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "branch",
+          "files",
+          "message"
+        ]
+      }
+    },
+    {
+      "id": "github__create_issue",
+      "server": "github",
+      "name": "create_issue",
+      "description": "Create a new issue in a GitHub repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "assignees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "title"
+        ]
+      }
+    },
+    {
+      "id": "github__create_pull_request",
+      "server": "github",
+      "name": "create_pull_request",
+      "description": "Create a new pull request in a GitHub repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "head": {
+            "type": "string"
+          },
+          "base": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "draft": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "title",
+          "head",
+          "base"
+        ]
+      }
+    },
+    {
+      "id": "github__fork_repository",
+      "server": "github",
+      "name": "fork_repository",
+      "description": "Fork a GitHub repository to your account or specified organization",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo"
+        ]
+      }
+    },
+    {
+      "id": "github__create_branch",
+      "server": "github",
+      "name": "create_branch",
+      "description": "Create a new branch in a GitHub repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "from_branch": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "branch"
+        ]
+      }
+    },
+    {
+      "id": "github__list_commits",
+      "server": "github",
+      "name": "list_commits",
+      "description": "Get list of commits of a branch in a GitHub repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "sha": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "owner",
+          "repo"
+        ]
+      }
+    },
+    {
+      "id": "github__list_issues",
+      "server": "github",
+      "name": "list_issues",
+      "description": "List issues in a GitHub repository with filtering options",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sort": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo"
+        ]
+      }
+    },
+    {
+      "id": "github__update_issue",
+      "server": "github",
+      "name": "update_issue",
+      "description": "Update an existing issue in a GitHub repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "issue_number": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "description": "open or closed"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "issue_number"
+        ]
+      }
+    },
+    {
+      "id": "github__add_issue_comment",
+      "server": "github",
+      "name": "add_issue_comment",
+      "description": "Add a comment to an existing issue",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "issue_number": {
+            "type": "integer"
+          },
+          "body": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "issue_number",
+          "body"
+        ]
+      }
+    },
+    {
+      "id": "github__search_code",
+      "server": "github",
+      "name": "search_code",
+      "description": "Search for code across GitHub repositories",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "order": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "per_page": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "q"
+        ]
+      }
+    },
+    {
+      "id": "github__search_issues",
+      "server": "github",
+      "name": "search_issues",
+      "description": "Search for issues and pull requests across GitHub repositories",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "sort": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "q"
+        ]
+      }
+    },
+    {
+      "id": "github__search_users",
+      "server": "github",
+      "name": "search_users",
+      "description": "Search for users on GitHub",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "sort": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "q"
+        ]
+      }
+    },
+    {
+      "id": "github__get_issue",
+      "server": "github",
+      "name": "get_issue",
+      "description": "Get details of a specific issue in a GitHub repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "issue_number": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "issue_number"
+        ]
+      }
+    },
+    {
+      "id": "github__get_pull_request",
+      "server": "github",
+      "name": "get_pull_request",
+      "description": "Get details of a specific pull request",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "pull_number": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number"
+        ]
+      }
+    },
+    {
+      "id": "github__list_pull_requests",
+      "server": "github",
+      "name": "list_pull_requests",
+      "description": "List and filter repository pull requests",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "head": {
+            "type": "string"
+          },
+          "base": {
+            "type": "string"
+          },
+          "sort": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo"
+        ]
+      }
+    },
+    {
+      "id": "github__create_pull_request_review",
+      "server": "github",
+      "name": "create_pull_request_review",
+      "description": "Create a review on a pull request",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "pull_number": {
+            "type": "integer"
+          },
+          "body": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string",
+            "description": "APPROVE, REQUEST_CHANGES, or COMMENT"
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number",
+          "body",
+          "event"
+        ]
+      }
+    },
+    {
+      "id": "github__merge_pull_request",
+      "server": "github",
+      "name": "merge_pull_request",
+      "description": "Merge a pull request",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "pull_number": {
+            "type": "integer"
+          },
+          "merge_method": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number"
+        ]
+      }
+    },
+    {
+      "id": "github__get_pull_request_files",
+      "server": "github",
+      "name": "get_pull_request_files",
+      "description": "Get the list of files changed in a pull request",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "pull_number": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number"
+        ]
+      }
+    },
+    {
+      "id": "github__get_pull_request_status",
+      "server": "github",
+      "name": "get_pull_request_status",
+      "description": "Get the combined status of all status checks for a pull request",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "pull_number": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number"
+        ]
+      }
+    },
+    {
+      "id": "github__update_pull_request_branch",
+      "server": "github",
+      "name": "update_pull_request_branch",
+      "description": "Update a pull request branch with the latest changes from the base branch",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "pull_number": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number"
+        ]
+      }
+    },
+    {
+      "id": "github__get_pull_request_comments",
+      "server": "github",
+      "name": "get_pull_request_comments",
+      "description": "Get the review comments on a pull request",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "pull_number": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number"
+        ]
+      }
+    },
+    {
+      "id": "github__get_pull_request_reviews",
+      "server": "github",
+      "name": "get_pull_request_reviews",
+      "description": "Get the reviews on a pull request",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "pull_number": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "owner",
+          "repo",
+          "pull_number"
+        ]
+      }
+    },
+    {
+      "id": "slack__slack_list_channels",
+      "server": "slack",
+      "name": "slack_list_channels",
+      "description": "List public or pre-defined channels in the workspace with pagination",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer"
+          },
+          "cursor": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "id": "slack__slack_post_message",
+      "server": "slack",
+      "name": "slack_post_message",
+      "description": "Post a new message to a Slack channel",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "channel_id",
+          "text"
+        ]
+      }
+    },
+    {
+      "id": "slack__slack_reply_to_thread",
+      "server": "slack",
+      "name": "slack_reply_to_thread",
+      "description": "Reply to a specific message thread in Slack",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "thread_ts": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "channel_id",
+          "thread_ts",
+          "text"
+        ]
+      }
+    },
+    {
+      "id": "slack__slack_add_reaction",
+      "server": "slack",
+      "name": "slack_add_reaction",
+      "description": "Add a reaction emoji to a message",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "reaction": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "channel_id",
+          "timestamp",
+          "reaction"
+        ]
+      }
+    },
+    {
+      "id": "slack__slack_get_channel_history",
+      "server": "slack",
+      "name": "slack_get_channel_history",
+      "description": "Get recent messages from a channel",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "channel_id"
+        ]
+      }
+    },
+    {
+      "id": "slack__slack_get_thread_replies",
+      "server": "slack",
+      "name": "slack_get_thread_replies",
+      "description": "Get all replies in a message thread",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "thread_ts": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "channel_id",
+          "thread_ts"
+        ]
+      }
+    },
+    {
+      "id": "slack__slack_get_users",
+      "server": "slack",
+      "name": "slack_get_users",
+      "description": "Get a list of all users in the workspace with their basic profile information",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer"
+          },
+          "cursor": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "id": "slack__slack_get_user_profile",
+      "server": "slack",
+      "name": "slack_get_user_profile",
+      "description": "Get detailed profile information for a specific user",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_close",
+      "server": "playwright",
+      "name": "browser_close",
+      "description": "Close the page",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "id": "playwright__browser_resize",
+      "server": "playwright",
+      "name": "browser_resize",
+      "description": "Resize the browser window",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "width",
+          "height"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_console_messages",
+      "server": "playwright",
+      "name": "browser_console_messages",
+      "description": "Returns all console messages",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "onlyErrors": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "id": "playwright__browser_handle_dialog",
+      "server": "playwright",
+      "name": "browser_handle_dialog",
+      "description": "Handle a dialog",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "accept": {
+            "type": "boolean"
+          },
+          "promptText": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accept"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_evaluate",
+      "server": "playwright",
+      "name": "browser_evaluate",
+      "description": "Evaluate JavaScript expression on page or element",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "function": {
+            "type": "string"
+          },
+          "element": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "function"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_file_upload",
+      "server": "playwright",
+      "name": "browser_file_upload",
+      "description": "Upload one or multiple files",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "playwright__browser_fill_form",
+      "server": "playwright",
+      "name": "browser_fill_form",
+      "description": "Fill multiple form fields",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "fields"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_install",
+      "server": "playwright",
+      "name": "browser_install",
+      "description": "Install the browser specified in the config. Call this if you get an error about the browser not being installed.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "id": "playwright__browser_press_key",
+      "server": "playwright",
+      "name": "browser_press_key",
+      "description": "Press a key on the keyboard",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_type",
+      "server": "playwright",
+      "name": "browser_type",
+      "description": "Type text into editable element",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "submit": {
+            "type": "boolean"
+          },
+          "slowly": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "element",
+          "ref",
+          "text"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_navigate",
+      "server": "playwright",
+      "name": "browser_navigate",
+      "description": "Navigate to a URL",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_navigate_back",
+      "server": "playwright",
+      "name": "browser_navigate_back",
+      "description": "Go back to the previous page",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "id": "playwright__browser_network_requests",
+      "server": "playwright",
+      "name": "browser_network_requests",
+      "description": "Returns all network requests since loading the page",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "id": "playwright__browser_take_screenshot",
+      "server": "playwright",
+      "name": "browser_take_screenshot",
+      "description": "Take a screenshot of the current page. You can't perform actions based on the screenshot, use browser_snapshot for actions.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "fullPage": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "id": "playwright__browser_snapshot",
+      "server": "playwright",
+      "name": "browser_snapshot",
+      "description": "Capture accessibility snapshot of the current page, this is better than screenshot",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "id": "playwright__browser_click",
+      "server": "playwright",
+      "name": "browser_click",
+      "description": "Perform click on a web page",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "doubleClick": {
+            "type": "boolean"
+          },
+          "button": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "element",
+          "ref"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_drag",
+      "server": "playwright",
+      "name": "browser_drag",
+      "description": "Perform drag and drop between two elements",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "startElement": {
+            "type": "string"
+          },
+          "startRef": {
+            "type": "string"
+          },
+          "endElement": {
+            "type": "string"
+          },
+          "endRef": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "startElement",
+          "startRef",
+          "endElement",
+          "endRef"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_hover",
+      "server": "playwright",
+      "name": "browser_hover",
+      "description": "Hover over element on page",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "element",
+          "ref"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_select_option",
+      "server": "playwright",
+      "name": "browser_select_option",
+      "description": "Select an option in a dropdown",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "element",
+          "ref",
+          "values"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_tabs",
+      "server": "playwright",
+      "name": "browser_tabs",
+      "description": "List, create, close, or select a browser tab.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "action"
+        ]
+      }
+    },
+    {
+      "id": "playwright__browser_wait_for",
+      "server": "playwright",
+      "name": "browser_wait_for",
+      "description": "Wait for text to appear or disappear or a specified time to pass",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "number"
+          },
+          "text": {
+            "type": "string"
+          },
+          "textGone": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "id": "puppeteer__puppeteer_navigate",
+      "server": "puppeteer",
+      "name": "puppeteer_navigate",
+      "description": "Navigate to a URL",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    {
+      "id": "puppeteer__puppeteer_screenshot",
+      "server": "puppeteer",
+      "name": "puppeteer_screenshot",
+      "description": "Take a screenshot of the current page or a specific element",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "selector": {
+            "type": "string"
+          },
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "id": "puppeteer__puppeteer_click",
+      "server": "puppeteer",
+      "name": "puppeteer_click",
+      "description": "Click an element on the page",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "selector"
+        ]
+      }
+    },
+    {
+      "id": "puppeteer__puppeteer_fill",
+      "server": "puppeteer",
+      "name": "puppeteer_fill",
+      "description": "Fill out an input field",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "selector",
+          "value"
+        ]
+      }
+    },
+    {
+      "id": "puppeteer__puppeteer_select",
+      "server": "puppeteer",
+      "name": "puppeteer_select",
+      "description": "Select an element on the page with Select tag",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "selector",
+          "value"
+        ]
+      }
+    },
+    {
+      "id": "puppeteer__puppeteer_hover",
+      "server": "puppeteer",
+      "name": "puppeteer_hover",
+      "description": "Hover an element on the page",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "selector"
+        ]
+      }
+    },
+    {
+      "id": "puppeteer__puppeteer_evaluate",
+      "server": "puppeteer",
+      "name": "puppeteer_evaluate",
+      "description": "Execute JavaScript in the browser console",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "script": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "script"
+        ]
+      }
+    },
+    {
+      "id": "brave_search__brave_web_search",
+      "server": "brave_search",
+      "name": "brave_web_search",
+      "description": "Performs a web search using the Brave Search API, ideal for general queries, news, articles, and online content. Use this for broad information gathering, recent events, or when you need diverse web sources. Supports pagination, content filtering, and freshness controls. Maximum 20 results per request, with offset for pagination.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "brave_search__brave_local_search",
+      "server": "brave_search",
+      "name": "brave_local_search",
+      "description": "Searches for local businesses and places using Brave's Local Search API. Best for queries related to physical locations, businesses, restaurants, services, etc. Returns detailed information including business names and addresses, ratings and review counts, phone numbers and opening hours. Use this when the query implies 'near me' or mentions specific locations.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "postgres__query",
+      "server": "postgres",
+      "name": "query",
+      "description": "Run a read-only SQL query",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "sql": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sql"
+        ]
+      }
+    },
+    {
+      "id": "sqlite__read_query",
+      "server": "sqlite",
+      "name": "read_query",
+      "description": "Execute a SELECT query on the SQLite database",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "SELECT SQL query to execute"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "sqlite__write_query",
+      "server": "sqlite",
+      "name": "write_query",
+      "description": "Execute an INSERT, UPDATE, or DELETE query on the SQLite database",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "sqlite__create_table",
+      "server": "sqlite",
+      "name": "create_table",
+      "description": "Create a new table in the SQLite database",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "CREATE TABLE SQL statement"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "sqlite__list_tables",
+      "server": "sqlite",
+      "name": "list_tables",
+      "description": "List all tables in the SQLite database",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "id": "sqlite__describe_table",
+      "server": "sqlite",
+      "name": "describe_table",
+      "description": "Get the schema information for a specific table",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "table_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "table_name"
+        ]
+      }
+    },
+    {
+      "id": "sqlite__append_insight",
+      "server": "sqlite",
+      "name": "append_insight",
+      "description": "Add a business insight to the memo",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "insight": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "insight"
+        ]
+      }
+    },
+    {
+      "id": "google_maps__maps_geocode",
+      "server": "google_maps",
+      "name": "maps_geocode",
+      "description": "Convert an address into geographic coordinates",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "address"
+        ]
+      }
+    },
+    {
+      "id": "google_maps__maps_reverse_geocode",
+      "server": "google_maps",
+      "name": "maps_reverse_geocode",
+      "description": "Convert coordinates into an address",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      }
+    },
+    {
+      "id": "google_maps__maps_search_places",
+      "server": "google_maps",
+      "name": "maps_search_places",
+      "description": "Search for places using Google Places API",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "location": {
+            "type": "object"
+          },
+          "radius": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "google_maps__maps_place_details",
+      "server": "google_maps",
+      "name": "maps_place_details",
+      "description": "Get detailed information about a specific place",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "place_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "place_id"
+        ]
+      }
+    },
+    {
+      "id": "google_maps__maps_distance_matrix",
+      "server": "google_maps",
+      "name": "maps_distance_matrix",
+      "description": "Calculate travel distance and time for multiple origins and destinations",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "origins": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "destinations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "origins",
+          "destinations"
+        ]
+      }
+    },
+    {
+      "id": "google_maps__maps_elevation",
+      "server": "google_maps",
+      "name": "maps_elevation",
+      "description": "Get elevation data for locations on the earth",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "locations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "locations"
+        ]
+      }
+    },
+    {
+      "id": "google_maps__maps_directions",
+      "server": "google_maps",
+      "name": "maps_directions",
+      "description": "Get directions between two points",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin",
+          "destination"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_search",
+      "server": "notion",
+      "name": "notion_search",
+      "description": "Search across the Notion workspace, connected sources and users for pages and databases matching a query",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "filters": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_fetch",
+      "server": "notion",
+      "name": "notion_fetch",
+      "description": "Retrieve details about a Notion page or database by its URL or ID",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_create_pages",
+      "server": "notion",
+      "name": "notion_create_pages",
+      "description": "Create one or more Notion pages with properties and content",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "pages": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "parent": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "pages"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_update_page",
+      "server": "notion",
+      "name": "notion_update_page",
+      "description": "Update a Notion page's properties or content",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "command": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id",
+          "command"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_move_pages",
+      "server": "notion",
+      "name": "notion_move_pages",
+      "description": "Move one or more Notion pages or databases to a new parent",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "page_or_database_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "new_parent": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "page_or_database_ids",
+          "new_parent"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_duplicate_page",
+      "server": "notion",
+      "name": "notion_duplicate_page",
+      "description": "Duplicate a Notion page within the workspace",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_create_database",
+      "server": "notion",
+      "name": "notion_create_database",
+      "description": "Create a new Notion database with the given schema",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "properties"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_update_database",
+      "server": "notion",
+      "name": "notion_update_database",
+      "description": "Update a Notion database's properties, name, description, or other attributes",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "database_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "database_id"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_create_comment",
+      "server": "notion",
+      "name": "notion_create_comment",
+      "description": "Add a comment to a Notion page",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "rich_text": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "page_id",
+          "rich_text"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_get_comments",
+      "server": "notion",
+      "name": "notion_get_comments",
+      "description": "Get comments and discussions on a Notion page",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page_id"
+        ]
+      }
+    },
+    {
+      "id": "notion__notion_get_teams",
+      "server": "notion",
+      "name": "notion_get_teams",
+      "description": "Retrieve the list of teams (teamspaces) in the current workspace",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "id": "notion__notion_get_users",
+      "server": "notion",
+      "name": "notion_get_users",
+      "description": "List users in the Notion workspace",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "page_size": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "id": "gmail__search_emails",
+      "server": "gmail",
+      "name": "search_emails",
+      "description": "Search the mailbox for messages matching a Gmail search query",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "maxResults": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "id": "gmail__read_email",
+      "server": "gmail",
+      "name": "read_email",
+      "description": "Read the full content of an email message by its ID",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "messageId"
+        ]
+      }
+    },
+    {
+      "id": "gmail__send_email",
+      "server": "gmail",
+      "name": "send_email",
+      "description": "Send a new email message to one or more recipients",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "to",
+          "subject",
+          "body"
+        ]
+      }
+    },
+    {
+      "id": "gmail__draft_email",
+      "server": "gmail",
+      "name": "draft_email",
+      "description": "Create a draft email without sending it",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "to",
+          "subject",
+          "body"
+        ]
+      }
+    },
+    {
+      "id": "gmail__delete_email",
+      "server": "gmail",
+      "name": "delete_email",
+      "description": "Permanently delete an email message",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "messageId"
+        ]
+      }
+    },
+    {
+      "id": "gmail__list_labels",
+      "server": "gmail",
+      "name": "list_labels",
+      "description": "List all labels in the mailbox",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "id": "google_calendar__list_events",
+      "server": "google_calendar",
+      "name": "list_events",
+      "description": "List calendar events in a given time range",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "timeMin": {
+            "type": "string"
+          },
+          "timeMax": {
+            "type": "string"
+          },
+          "calendarId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "id": "google_calendar__create_event",
+      "server": "google_calendar",
+      "name": "create_event",
+      "description": "Create a new calendar event with title, start and end time, and attendees",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "attendees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "location": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "summary",
+          "start",
+          "end"
+        ]
+      }
+    },
+    {
+      "id": "google_calendar__update_event",
+      "server": "google_calendar",
+      "name": "update_event",
+      "description": "Update an existing calendar event",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "eventId"
+        ]
+      }
+    },
+    {
+      "id": "google_calendar__delete_event",
+      "server": "google_calendar",
+      "name": "delete_event",
+      "description": "Delete a calendar event",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "eventId"
+        ]
+      }
+    },
+    {
+      "id": "google_calendar__find_free_time",
+      "server": "google_calendar",
+      "name": "find_free_time",
+      "description": "Find free time slots in the calendar for a given date range and duration",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "timeMin": {
+            "type": "string"
+          },
+          "timeMax": {
+            "type": "string"
+          },
+          "durationMinutes": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "timeMin",
+          "timeMax",
+          "durationMinutes"
+        ]
+      }
+    }
+  ]
+}

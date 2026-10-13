@@ -1,0 +1,3 @@
+# Core (everything runs with just these)
+mcp>=2.0,<3
+numpy>=1.26

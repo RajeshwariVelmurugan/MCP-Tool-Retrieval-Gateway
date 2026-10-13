@@ -1,0 +1,6 @@
+# Optional: real embedding / reranker models and the LLM end-to-end eval.
+# Install with:  pip install -r requirements-ml.txt
+fastembed>=0.4          # ONNX embeddings + cross-encoder rerankers (no torch)
+# sentence-transformers>=3.0   # alternative to fastembed (pulls in torch)
+anthropic>=0.60         # for `python -m toolgate e2e` (native tool search comparison)
+tiktoken>=0.7           # optional: better token counts (set TOOLGATE_TOKENIZER=tiktoken)

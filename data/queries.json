@@ -1,0 +1,886 @@
+{
+  "meta": {
+    "source": "starter-handwritten",
+    "note": "Small starter set so the pipeline runs. Expand to 300+ queries, review every label yourself, keep the dev/test split honest.",
+    "query_count": 86
+  },
+  "queries": [
+    {
+      "id": "q001",
+      "query": "show git status of the repo",
+      "gold": [
+        "git__git_status"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q002",
+      "query": "commit the staged changes with a message",
+      "gold": [
+        "git__git_commit"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q003",
+      "query": "get the current time in Tokyo",
+      "gold": [
+        "time__get_current_time"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "test"
+    },
+    {
+      "id": "q004",
+      "query": "create a new GitHub issue for the login bug",
+      "gold": [
+        "github__create_issue"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q005",
+      "query": "list open pull requests in the repository",
+      "gold": [
+        "github__list_pull_requests"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q006",
+      "query": "take a screenshot of the page with playwright",
+      "gold": [
+        "playwright__browser_take_screenshot"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "test"
+    },
+    {
+      "id": "q007",
+      "query": "run a SELECT query on the sqlite database",
+      "gold": [
+        "sqlite__read_query"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q008",
+      "query": "geocode this street address",
+      "gold": [
+        "google_maps__maps_geocode"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q009",
+      "query": "post a message to the #general slack channel",
+      "gold": [
+        "slack__slack_post_message"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "test"
+    },
+    {
+      "id": "q010",
+      "query": "search the web for the latest news about LLMs",
+      "gold": [
+        "brave_search__brave_web_search"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q011",
+      "query": "read app.py, utils.py and models.py all at once",
+      "gold": [
+        "filesystem__read_multiple_files"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q012",
+      "query": "run this SQL against postgres",
+      "gold": [
+        "postgres__query"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "test"
+    },
+    {
+      "id": "q013",
+      "query": "open example.com using puppeteer",
+      "gold": [
+        "puppeteer__puppeteer_navigate"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q014",
+      "query": "fill the login form with my username and password in playwright",
+      "gold": [
+        "playwright__browser_fill_form"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q015",
+      "query": "check the browser console for JavaScript errors",
+      "gold": [
+        "playwright__browser_console_messages"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "test"
+    },
+    {
+      "id": "q016",
+      "query": "list all tables in the sqlite database",
+      "gold": [
+        "sqlite__list_tables"
+      ],
+      "gold_mode": "all",
+      "type": "direct",
+      "split": "dev"
+    },
+    {
+      "id": "q017",
+      "query": "what's inside the file notes.txt",
+      "gold": [
+        "filesystem__read_text_file"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q018",
+      "query": "rename report_old.pdf to report_final.pdf",
+      "gold": [
+        "filesystem__move_file"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q019",
+      "query": "find every file with 'test' in its name under the project",
+      "gold": [
+        "filesystem__search_files"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q020",
+      "query": "how big is each file in my downloads folder",
+      "gold": [
+        "filesystem__list_directory_with_sizes"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q021",
+      "query": "make a new folder called backups",
+      "gold": [
+        "filesystem__create_directory"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q022",
+      "query": "overwrite the file with this new content",
+      "gold": [
+        "filesystem__write_file"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q023",
+      "query": "change a few lines in main.py and show me the diff",
+      "gold": [
+        "filesystem__edit_file"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q024",
+      "query": "when was this file last modified and what are its permissions",
+      "gold": [
+        "filesystem__get_file_info"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q025",
+      "query": "show me the overall folder structure as a tree",
+      "gold": [
+        "filesystem__directory_tree"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q026",
+      "query": "which folders am I even allowed to touch",
+      "gold": [
+        "filesystem__list_allowed_directories"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q027",
+      "query": "store a new person called Alice in my knowledge graph",
+      "gold": [
+        "memory__create_entities"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q028",
+      "query": "link Alice to the Acme company as an employee",
+      "gold": [
+        "memory__create_relations"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q029",
+      "query": "look up anything related to 'project deadline' in memory",
+      "gold": [
+        "memory__search_nodes"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q030",
+      "query": "dump everything stored in the knowledge graph",
+      "gold": [
+        "memory__read_graph"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q031",
+      "query": "forget everything about Carol",
+      "gold": [
+        "memory__delete_entities"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q032",
+      "query": "what changed in my working directory but isn't staged yet",
+      "gold": [
+        "git__git_diff_unstaged"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q033",
+      "query": "see who made the last 10 commits",
+      "gold": [
+        "git__git_log"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q034",
+      "query": "start a new branch for the feature",
+      "gold": [
+        "git__git_create_branch"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q035",
+      "query": "stage app.py for commit",
+      "gold": [
+        "git__git_add"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q036",
+      "query": "switch to the develop branch",
+      "gold": [
+        "git__git_checkout"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q037",
+      "query": "show what's inside commit abc123",
+      "gold": [
+        "git__git_show"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q038",
+      "query": "download this webpage and convert it to markdown",
+      "gold": [
+        "fetch__fetch"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q039",
+      "query": "what time is it in London when it's 3pm in New York",
+      "gold": [
+        "time__convert_time"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q040",
+      "query": "think through this problem step by step before answering",
+      "gold": [
+        "sequential_thinking__sequentialthinking"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q041",
+      "query": "open a PR from my feature branch into main",
+      "gold": [
+        "github__create_pull_request"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q042",
+      "query": "grab the README from the openai/openai-python repo",
+      "gold": [
+        "github__get_file_contents"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q043",
+      "query": "find GitHub projects about vector databases",
+      "gold": [
+        "github__search_repositories"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q044",
+      "query": "look for usages of parse_config in code across GitHub",
+      "gold": [
+        "github__search_code"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q045",
+      "query": "approve this pull request",
+      "gold": [
+        "github__create_pull_request_review"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q046",
+      "query": "combine PR 42 into the main branch",
+      "gold": [
+        "github__merge_pull_request"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q047",
+      "query": "which files did pull request 17 touch",
+      "gold": [
+        "github__get_pull_request_files"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q048",
+      "query": "did the CI checks pass for PR 9",
+      "gold": [
+        "github__get_pull_request_status"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q049",
+      "query": "make my own copy of the transformers repo",
+      "gold": [
+        "github__fork_repository"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q050",
+      "query": "write a comment on issue 55 saying it's fixed",
+      "gold": [
+        "github__add_issue_comment"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q051",
+      "query": "close issue 12",
+      "gold": [
+        "github__update_issue"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q052",
+      "query": "tell the team in Slack that the deploy finished",
+      "gold": [
+        "slack__slack_post_message"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q053",
+      "query": "reply inside that Slack thread",
+      "gold": [
+        "slack__slack_reply_to_thread"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q054",
+      "query": "react with a thumbs up to the message",
+      "gold": [
+        "slack__slack_add_reaction"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q055",
+      "query": "catch me up on what was said in #engineering today",
+      "gold": [
+        "slack__slack_get_channel_history"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q056",
+      "query": "who is in the workspace",
+      "gold": [
+        "slack__slack_get_users"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q057",
+      "query": "send an email to my manager about the delay",
+      "gold": [
+        "gmail__send_email"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q058",
+      "query": "find the email from the recruiter last week",
+      "gold": [
+        "gmail__search_emails"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q059",
+      "query": "put a meeting on my calendar tomorrow at 4pm",
+      "gold": [
+        "google_calendar__create_event"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q060",
+      "query": "when am I free on Thursday",
+      "gold": [
+        "google_calendar__find_free_time"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q061",
+      "query": "cancel my 3pm appointment",
+      "gold": [
+        "google_calendar__delete_event"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q062",
+      "query": "wait until the text 'Welcome' shows up on the page",
+      "gold": [
+        "playwright__browser_wait_for"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q063",
+      "query": "run custom JavaScript inside the puppeteer page",
+      "gold": [
+        "puppeteer__puppeteer_evaluate"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q064",
+      "query": "what columns does the users table have",
+      "gold": [
+        "sqlite__describe_table"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q065",
+      "query": "add a row to the orders table",
+      "gold": [
+        "sqlite__write_query"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q066",
+      "query": "how far is it from Chennai to Bangalore by road",
+      "gold": [
+        "google_maps__maps_distance_matrix"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q067",
+      "query": "turn coordinates 13.08, 80.27 into a street address",
+      "gold": [
+        "google_maps__maps_reverse_geocode"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q068",
+      "query": "find restaurants near Marina Beach using Google Places",
+      "gold": [
+        "google_maps__maps_search_places"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q069",
+      "query": "how high above sea level is Ooty",
+      "gold": [
+        "google_maps__maps_elevation"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q070",
+      "query": "get turn-by-turn directions to the airport",
+      "gold": [
+        "google_maps__maps_directions"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q071",
+      "query": "find the Notion page about Q3 planning",
+      "gold": [
+        "notion__notion_search"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q072",
+      "query": "leave a comment on a Notion page",
+      "gold": [
+        "notion__notion_create_comment"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "test"
+    },
+    {
+      "id": "q073",
+      "query": "make a new page in Notion",
+      "gold": [
+        "notion__notion_create_pages"
+      ],
+      "gold_mode": "all",
+      "type": "paraphrase",
+      "split": "dev"
+    },
+    {
+      "id": "q074",
+      "query": "read config.json and then stage it for commit",
+      "gold": [
+        "filesystem__read_text_file",
+        "git__git_add"
+      ],
+      "gold_mode": "all",
+      "type": "multi",
+      "split": "dev"
+    },
+    {
+      "id": "q075",
+      "query": "search GitHub for the bug report, then post the link to Slack",
+      "gold": [
+        "github__search_issues",
+        "slack__slack_post_message"
+      ],
+      "gold_mode": "all",
+      "type": "multi",
+      "split": "test"
+    },
+    {
+      "id": "q076",
+      "query": "check my calendar for tomorrow and email the agenda to the team",
+      "gold": [
+        "google_calendar__list_events",
+        "gmail__send_email"
+      ],
+      "gold_mode": "all",
+      "type": "multi",
+      "split": "dev"
+    },
+    {
+      "id": "q077",
+      "query": "fetch the page and save it to a file",
+      "gold": [
+        "fetch__fetch",
+        "filesystem__write_file"
+      ],
+      "gold_mode": "all",
+      "type": "multi",
+      "split": "dev"
+    },
+    {
+      "id": "q078",
+      "query": "geocode the address and then get the elevation there",
+      "gold": [
+        "google_maps__maps_geocode",
+        "google_maps__maps_elevation"
+      ],
+      "gold_mode": "all",
+      "type": "multi",
+      "split": "test"
+    },
+    {
+      "id": "q079",
+      "query": "commit my changes locally and then open a pull request",
+      "gold": [
+        "git__git_commit",
+        "github__create_pull_request"
+      ],
+      "gold_mode": "all",
+      "type": "multi",
+      "split": "dev"
+    },
+    {
+      "id": "q080",
+      "query": "query the sqlite database and store the result in the knowledge graph",
+      "gold": [
+        "sqlite__read_query",
+        "memory__create_entities"
+      ],
+      "gold_mode": "all",
+      "type": "multi",
+      "split": "dev"
+    },
+    {
+      "id": "q081",
+      "query": "what did I change?",
+      "gold": [
+        "git__git_diff_unstaged",
+        "git__git_diff_staged",
+        "git__git_status"
+      ],
+      "gold_mode": "any",
+      "type": "vague",
+      "split": "test"
+    },
+    {
+      "id": "q082",
+      "query": "what's going on in the repo",
+      "gold": [
+        "git__git_status",
+        "git__git_log",
+        "github__list_commits"
+      ],
+      "gold_mode": "any",
+      "type": "vague",
+      "split": "dev"
+    },
+    {
+      "id": "q083",
+      "query": "I need some info from the internet",
+      "gold": [
+        "fetch__fetch",
+        "brave_search__brave_web_search"
+      ],
+      "gold_mode": "any",
+      "type": "vague",
+      "split": "dev"
+    },
+    {
+      "id": "q084",
+      "query": "tell someone about this",
+      "gold": [
+        "slack__slack_post_message",
+        "gmail__send_email"
+      ],
+      "gold_mode": "any",
+      "type": "vague",
+      "split": "test"
+    },
+    {
+      "id": "q085",
+      "query": "look at the page",
+      "gold": [
+        "playwright__browser_snapshot",
+        "playwright__browser_take_screenshot",
+        "puppeteer__puppeteer_screenshot"
+      ],
+      "gold_mode": "any",
+      "type": "vague",
+      "split": "dev"
+    },
+    {
+      "id": "q086",
+      "query": "where is this place",
+      "gold": [
+        "google_maps__maps_geocode",
+        "google_maps__maps_search_places",
+        "google_maps__maps_place_details"
+      ],
+      "gold_mode": "any",
+      "type": "vague",
+      "split": "dev"
+    }
+  ]
+}

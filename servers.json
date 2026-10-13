@@ -1,0 +1,17 @@
+{
+  "_comment": "Downstream MCP servers the collector reads and the gateway forwards to. Set enabled:true once you have the prerequisites (Node for npx, uv for uvx, API keys in .env). Use ${VAR} to reference environment variables. Package names/flags change upstream: check each server's README.",
+  "servers": {
+    "filesystem": { "enabled": true, "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "."] },
+    "memory": { "enabled": true, "command": "npx", "args": ["-y", "@modelcontextprotocol/server-memory"] },
+    "sequential_thinking": { "enabled": true, "command": "npx", "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"] },
+    "playwright": { "enabled": true, "command": "npx", "args": ["-y", "@playwright/mcp@latest", "--headless"] },
+    "fetch": { "enabled": true, "command": "uvx", "args": ["mcp-server-fetch"] },
+    "git": { "enabled": true, "command": "uvx", "args": ["mcp-server-git", "--repository", "."] },
+    "time": { "enabled": true, "command": "uvx", "args": ["mcp-server-time"] },
+    "github": { "enabled": false, "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"], "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}" } },
+    "slack": { "enabled": false, "command": "npx", "args": ["-y", "@modelcontextprotocol/server-slack"], "env": { "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}", "SLACK_TEAM_ID": "${SLACK_TEAM_ID}" } },
+    "brave_search": { "enabled": false, "command": "npx", "args": ["-y", "@modelcontextprotocol/server-brave-search"], "env": { "BRAVE_API_KEY": "${BRAVE_API_KEY}" } },
+    "puppeteer": { "enabled": false, "command": "npx", "args": ["-y", "@modelcontextprotocol/server-puppeteer"] },
+    "google_maps": { "enabled": false, "command": "npx", "args": ["-y", "@modelcontextprotocol/server-google-maps"], "env": { "GOOGLE_MAPS_API_KEY": "${GOOGLE_MAPS_API_KEY}" } }
+  }
+}

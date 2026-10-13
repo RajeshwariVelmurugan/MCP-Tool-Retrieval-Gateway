@@ -1,0 +1,9 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "serve dashboard", "type": "shell", "command": "python -m toolgate serve", "problemMatcher": [] },
+    { "label": "run eval", "type": "shell", "command": "python -m toolgate eval --ablations", "problemMatcher": [] },
+    { "label": "collect tools", "type": "shell", "command": "python -m toolgate collect", "problemMatcher": [] },
+    { "label": "run tests", "type": "shell", "command": "python -m unittest discover -s tests -v", "problemMatcher": [] }
+  ]
+}

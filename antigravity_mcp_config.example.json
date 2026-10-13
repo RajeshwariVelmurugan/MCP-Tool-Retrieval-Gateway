@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "toolgate": {
+      "command": "ABSOLUTE/PATH/TO/mcp-tool-retrieval-gateway/.venv/bin/python",
+      "args": ["-m", "toolgate.gateway"],
+      "cwd": "ABSOLUTE/PATH/TO/mcp-tool-retrieval-gateway",
+      "env": { "PYTHONPATH": "ABSOLUTE/PATH/TO/mcp-tool-retrieval-gateway" }
+    }
+  }
+}

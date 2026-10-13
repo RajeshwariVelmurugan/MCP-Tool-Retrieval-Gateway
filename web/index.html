@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>toolgate · MCP Tool Retrieval Gateway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-row">
+      <div class="brand-group">
+        <div class="logo-badge" title="toolgate retrieval engine">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>
+            <span class="brand-title">toolgate</span>
+            <span class="status-indicator">
+              <span class="pulse-dot"></span>
+              Gateway Active
+            </span>
+          </h1>
+          <p class="sub">MCP tool retrieval gateway · search, evaluate, deploy</p>
+        </div>
+      </div>
+      <div class="top-right">
+        <div id="chips" class="chips" aria-live="polite"></div>
+        <button id="theme-toggle" class="theme-toggle-btn" type="button" title="Toggle color theme">
+          <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+          </svg>
+          <span id="theme-label">Theme</span>
+        </button>
+      </div>
+    </div>
+    <nav class="wrap tabs" role="tablist">
+      <button role="tab" data-tab="play" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        Playground
+      </button>
+      <button role="tab" data-tab="eval" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+        Evaluation & Benchmarks
+      </button>
+      <button role="tab" data-tab="tools" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+        </svg>
+        Tools Explorer
+      </button>
+      <button role="tab" data-tab="gateway" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        Gateway Config
+      </button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <div id="banner" class="banner" hidden></div>
+
+    <!-- Playground Tab -->
+    <section id="tab-play" class="tab">
+      <form id="search-form" class="panel">
+        <div class="form-row">
+          <label class="grow">Task description
+            <input id="q" type="text" placeholder="e.g. create a github pull request, or take a screenshot" autocomplete="off" required>
+          </label>
+          <label>Known queries
+            <select id="examples"><option value="">Pick an example query…</option></select>
+          </label>
+          <label class="narrow">Top-k
+            <input id="k" type="number" min="1" max="50" value="5">
+          </label>
+          <fieldset id="methods" class="methods"><legend>Methods to Compare</legend></fieldset>
+          <button class="primary" type="submit">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            Search Tools
+          </button>
+        </div>
+
+        <div class="quick-queries">
+          <span class="quick-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+            Try query:
+          </span>
+          <button type="button" class="quick-btn" data-query="close issue 12 on github">Close issue #12</button>
+          <button type="button" class="quick-btn" data-query="take a screenshot of the active browser page">Browser screenshot</button>
+          <button type="button" class="quick-btn" data-query="send a message to general channel in slack">Post Slack message</button>
+          <button type="button" class="quick-btn" data-query="reverse this text character by character">Reverse text</button>
+          <button type="button" class="quick-btn" data-query="convert temperature from celsius to fahrenheit">Convert temperature</button>
+        </div>
+      </form>
+
+      <div id="play-error" class="error" hidden></div>
+      <div id="play-meta" class="meta-bar"></div>
+      <div id="play-results" class="cols"></div>
+    </section>
+
+    <!-- Evaluation Tab -->
+    <section id="tab-eval" class="tab" hidden>
+      <form id="eval-form" class="panel">
+        <div class="form-row">
+          <label>Data Split
+            <select id="split">
+              <option value="all">all (86 queries)</option>
+              <option value="dev">dev (tune on this)</option>
+              <option value="test">test (final report)</option>
+            </select>
+          </label>
+          <label class="narrow">Report k
+            <select id="eval-k">
+              <option>1</option>
+              <option>3</option>
+              <option selected>5</option>
+              <option>10</option>
+            </select>
+          </label>
+          <label class="check">
+            <input id="ablations" type="checkbox" checked>
+            Include ablations (depth, pool size)
+          </label>
+          <button class="primary" type="submit">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Run Benchmark
+          </button>
+          <span id="eval-status" class="muted"></span>
+        </div>
+      </form>
+
+      <div id="eval-error" class="error" hidden></div>
+
+      <div id="eval-out" hidden>
+        <!-- KPI summary cards -->
+        <div id="eval-kpis" class="kpi-grid"></div>
+
+        <p id="eval-meta" class="meta-bar"></p>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"></path></svg>
+              Retrieval Accuracy & Token Metrics
+            </h2>
+          </div>
+          <div class="scroll"><table id="eval-table"></table></div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <h2 id="chart1-title">Full-hit@k Comparison</h2>
+            <div id="chart1"></div>
+          </div>
+          <div class="panel">
+            <h2>Context Token Cost vs. All-Tools Baseline</h2>
+            <div id="chart2"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              Failure Analysis & Error Taxonomy
+            </h2>
+            <label class="inline">Method <select id="fail-method"></select></label>
+          </div>
+          <div id="fail-buckets"></div>
+          <div class="scroll"><table id="fail-table"></table></div>
+        </div>
+
+        <div class="panel" id="ablation-box" hidden>
+          <div class="panel-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              Ablations & Scalability Tests
+            </h2>
+          </div>
+          <div id="ablations-out"></div>
+        </div>
+      </div>
+      <p id="eval-empty" class="muted" hidden>No evaluation run yet. Select parameters and click “Run Benchmark”.</p>
+    </section>
+
+    <!-- Tools Explorer Tab -->
+    <section id="tab-tools" class="tab" hidden>
+      <div class="panel">
+        <div class="form-row">
+          <label class="grow">Search tools in corpus
+            <input id="tool-filter" type="search" placeholder="Filter by tool id, description, or parameter name...">
+          </label>
+        </div>
+        <div style="margin-top: 14px;">
+          <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 6px;">Filter by Server:</span>
+          <div id="server-chips" class="chips"></div>
+        </div>
+      </div>
+      <p id="tools-count" class="meta-bar"></p>
+      <div class="panel">
+        <div class="scroll"><table id="tools-table"></table></div>
+      </div>
+    </section>
+
+    <!-- Gateway Config Tab -->
+    <section id="tab-gateway" class="tab" hidden>
+      <div class="panel">
+        <div class="panel-header">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            Connect Gateway to Antigravity IDE or Claude Desktop
+          </h2>
+        </div>
+        <p class="muted" style="margin-top: 0; line-height: 1.6;">
+          The gateway presents only <strong>2 tools</strong> (<code>search_tools</code> and <code>call_tool</code>) to your LLM agent, shielding its context window while granting on-demand access to all registered MCP servers.
+        </p>
+
+        <div style="position: relative; margin: 18px 0;">
+          <pre id="mcp-config"></pre>
+        </div>
+        
+        <button id="copy-config" class="primary" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copy Config to Clipboard
+        </button>
+
+        <div style="margin-top: 28px; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+          <h3 style="font-size: 15px; margin: 0 0 12px;">Quick Setup Workflow:</h3>
+          <ol style="color: var(--text-secondary); font-size: 13.5px; line-height: 1.8; padding-left: 20px; margin: 0;">
+            <li>Paste the generated JSON above into your IDE's MCP Configuration panel.</li>
+            <li>Run <code>python -m toolgate collect</code> whenever you add or modify servers in <code>servers.json</code>.</li>
+            <li>Restart the agent MCP connection. The agent will discover tools dynamically via natural language!</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="toast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toast-text">Configuration copied!</span>
+  </div>
+
+  <!-- Schema Inspector Modal -->
+  <div id="schema-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-tool-id">tool_name</h3>
+        <button id="modal-close-btn" class="modal-close" type="button">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-tool-desc" style="margin-top: 0; color: var(--text-secondary);"></p>
+        <h4 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px;">Parameters & Schema:</h4>
+        <pre id="modal-tool-schema"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
