@@ -52,7 +52,7 @@ python -m unittest discover -s tests -v
 3. `AGENTS.md` and `.agent/` contain project rules and two workflows for the IDE's agent. I wrote these from memory of how Antigravity reads workspace rules; if your version looks elsewhere, move the files. Nothing in the project depends on them.
 4. **Use the gateway as an MCP server in Antigravity:** open the dashboard's **Gateway** tab, copy the generated config (it already contains your absolute paths) and paste it into the IDE's MCP server configuration (the menu name varies by version; look for "MCP servers" / "raw config" in the agent panel). Restart the connection: the agent should now see exactly two tools. See `antigravity_mcp_config.example.json` for the shape.
 
-## Make it real (the part that earns the resume line)
+## Make it real 
 
 1. **Collect real tools (target 200+).** Edit `servers.json` (enable servers you can run, put API keys in `.env`), then:
    ```bash
